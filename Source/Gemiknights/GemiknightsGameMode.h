@@ -4,7 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
+#include "Containers/Queue.h"
+#include "CommandBase.h"
 #include "GemiknightsGameMode.generated.h"
+
 
 UCLASS(minimalapi)
 class AGemiknightsGameMode : public AGameModeBase
@@ -13,6 +16,22 @@ class AGemiknightsGameMode : public AGameModeBase
 
 public:
 	AGemiknightsGameMode();
+
+	UFUNCTION(BlueprintCallable)
+	void ParseText(const FString& Text);
+
+	UFUNCTION(BlueprintCallable)
+	FString GetAPIKey() const;
+
+protected:
+	UPROPERTY(EditAnywhere)
+	TMap<FString, TSubclassOf<UCommandBase>> RegisteredCommands{};
+
+private:
+	UPROPERTY()
+	TArray<TObjectPtr<UCommandBase>> CurrentCommands{};
+
+	void ProcessNextCommand();
 };
 
 
